@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+	overflow: hidden;
+}
+
+html,
+body {
+	background-color: black;
+	color: white;
+}
