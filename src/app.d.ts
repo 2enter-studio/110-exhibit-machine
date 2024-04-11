@@ -8,6 +8,14 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+	type AudienceInput = {
+		id: string;
+		name: string;
+		birthday: string;
+		x: number;
+		y: number;
+		progress_start: number;
+	};
 }
 
 export {};
