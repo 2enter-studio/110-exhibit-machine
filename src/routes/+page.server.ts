@@ -1,1 +1,1 @@
-console.log('hello');
+export const ssr = false;
