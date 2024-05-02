@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (!id) {
 		return json({ error: 'missing id' }, { status: 400 });
 	}
-	await assignProgress(id);
+	const progress_start = await assignProgress(id);
 
-	return json({ id });
+	return json({ id, progress_start });
 };
