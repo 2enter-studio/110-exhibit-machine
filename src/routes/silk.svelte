@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
 	import { writable } from 'svelte/store';
+	import { fade } from 'svelte/transition';
 
 	export class Silk {
 		input: AudienceInput;
@@ -14,46 +15,65 @@
 
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { getDurationFromProgress, progressToDate, videoLength } from '$lib/progress';
-	import moment from 'moment';
+	import { getDurationFromProgress, videoLength } from '$lib/progress';
 
 	export let silk: Silk;
 
-	let dom: HTMLVideoElement;
+	let video: HTMLVideoElement;
 	let duration: number;
-	// const dropNum = Math.floor(Math.random() * 5);
-	let top = silk.input.y;
+	let top = -100;
+	let spiderImg = '0001.webp';
+	let spiderYOffset = 0;
+	let finished = false;
 
 	onMount(() => {
 		duration = getDurationFromProgress(silk.input);
 		const startAt = videoLength - duration;
-		console.log('birthday', silk.input.birthday);
-		console.log(
-			'progress start date',
-			moment(progressToDate(silk.input.progress_start)).format('YYYY MM DD')
-		);
-		console.log('start at: ', startAt);
-		console.log('duration: ', duration);
-		dom.currentTime = startAt;
-		// dom.style.animation = `drop-0 ${Math.ceil(duration)}s steps(${~~(duration * 3)})`;
-		dom.play();
+		video.currentTime = startAt;
+		console.table(silk.input);
 
-		dom.onended = () => {
-			if (dom.src.indexOf('string.webm') !== -1) {
-				dom.src = '/silks/webm/dissolve_0.webm';
+		video.play();
+
+		video.onended = () => {
+			if (video.src.indexOf('string.webm') !== -1) {
+				video.src = `/silks/webm/dissolve_${Math.floor(Math.random() * 8)}.webm`;
 				console.log('done');
-				dom.load();
+				video.load();
+				// video.play();
+				finished = true;
 				clearInterval(interval);
+				clearInterval(spiderInterval);
 			} else {
 				console.log('finished dissolve');
-				$silks = $silks.filter((s) => s.input.id !== s.input.id);
 			}
 		};
 
+		// video.onpause = (e) => {
+		// 	console.log('paused: ', e);
+		// };
+		//
+		// video.onplay = (e) => {
+		// 	console.log('played: ', e);
+		// };
+
 		const timeStep = 100;
+
 		const interval = setInterval(() => {
-			top += (videoLength / duration) * 0.01;
+			if (video.currentTime) {
+				top = ((video.currentTime - startAt) / duration) * (1 - silk.input.y) - 1;
+			}
 		}, timeStep);
+
+		const spiderInterval = setInterval(() => {
+			const num = Math.ceil(Math.random() * 200);
+			let imgUrl = num.toString();
+			while (imgUrl.length < 4) {
+				imgUrl = `0${imgUrl}`;
+			}
+			spiderImg = `${imgUrl}.webp`;
+			spiderYOffset = Math.random() * 100 * 0.02;
+			console.log(video.currentTime);
+		}, 1500);
 	});
 
 	onDestroy(() => {
@@ -61,14 +81,28 @@
 	});
 </script>
 
-<video
-	bind:this={dom}
-	autoplay
-	muted
-	playsinline
-	class="absolute h-screen mix-blend-lighten"
-	style="left: {silk.input.x * 85}vw; top: {-100 + top}vh;"
-	src="/silks/webm/string.webm"
+<div
+	class="absolute h-screen flex justify-center items-end w-fit"
+	style="left: {silk.input.x * 85}vw; top: {top * 100}vh;"
 >
-	<!--	<source src="/silks/webm/string.webm" type="video/webm" />-->
-</video>
+	<video
+		bind:this={video}
+		autoplay
+		muted
+		playsinline
+		class="mix-blend-lighten h-full"
+		src="/silks/webm/string.webm"
+	/>
+	{#if !finished}
+		{#key spiderImg}
+			<img
+				out:fade={{ duration: 2500 }}
+				in:fade={{ duration: 500 }}
+				src="/spiders/webp/1/{spiderImg}"
+				alt=""
+				class="z-20 invert h-[10vh] w-auto absolute"
+				style="margin-bottom: {spiderYOffset}vh;"
+			/>
+		{/key}
+	{/if}
+</div>

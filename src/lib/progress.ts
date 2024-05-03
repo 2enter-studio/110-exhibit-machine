@@ -1,12 +1,15 @@
 let time = 0;
 let value = 0;
 export const videoLength = 387 as const;
+
 // export const videoLength = 30 as const;
+const startTime = Date.now();
 
 setInterval(() => {
-	time = (time + 0.001) % videoLength;
+	time = ((Date.now() - startTime) / 1000) % videoLength;
+	// time = (time + 0.01) % videoLength;
 	value = time / videoLength;
-}, 1);
+}, 10);
 
 const beginDate = new Date(1960, 0, 1);
 const endDate = new Date(2070, 11, 30);
@@ -20,7 +23,6 @@ function progressToDate(progress = value) {
 
 function dateToProgress(date: Date) {
 	const time = date.getTime();
-	console.log(time, beginTime, endTime);
 	return (time - beginTime) / (endTime - beginTime);
 }
 
@@ -32,7 +34,7 @@ function getDurationFromProgress(input: AudienceInput) {
 	const range =
 		progress > progress_start ? progress - progress_start : progress + 1 - progress_start;
 
-	return range * videoLength;
+	return ~~(range * videoLength) - 3;
 }
 
 export { value, progressToDate, dateToProgress, getDurationFromProgress };
