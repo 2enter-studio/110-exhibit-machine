@@ -1,4 +1,5 @@
-export const videoLength = 387 as const;
+import config from '$lib/config'
+const { video_length } = config
 
 const beginDate = new Date(1960, 0, 1);
 const endDate = new Date(2070, 0, 1);
@@ -23,7 +24,7 @@ function getDurationFromProgress(input: AudienceInput) {
 	const range =
 		progress > progress_start ? progress - progress_start : progress + 1 - progress_start;
 
-	return ~~(range * videoLength) - 3;
+	return ~~(range * video_length) - 3;
 }
 
 export { progressToDate, dateToProgress, getDurationFromProgress };
