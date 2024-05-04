@@ -1,12 +1,14 @@
-import { NODE_ENV, OSC_PORT, OSC_TARGET_ADDRESS } from '$env/static/private';
 import { Server } from 'node-osc';
+
+import { ENV, OSC_PORT, OSC_TARGET_ADDRESS } from '$env/static/private';
 import config from '$lib/config';
 
 const { video_length } = config;
 
 let progressValue = 0;
 
-if (NODE_ENV === 'development') {
+console.log(ENV)
+if (ENV === 'development') {
 	const startTime = Date.now();
 
 	setInterval(() => {
