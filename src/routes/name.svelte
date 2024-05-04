@@ -8,7 +8,10 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import config from '$lib/config';
 	let dom: HTMLDivElement;
+
+	const { name_update_timeout, name_fade_duration } = config;
 
 	onMount(() => {
 		setInterval(() => {
@@ -30,14 +33,14 @@
 					);
 				}
 			});
-		}, 5000);
+		}, name_update_timeout);
 	});
 </script>
 
 <div bind:this={dom}>
 	{#each $displayed as input}
 		<h1
-			transition:fade={{ duration: 2000 }}
+			transition:fade={{ duration: name_fade_duration }}
 			class="absolute text-white transition-all duration-1000 text-right w-fit"
 			style="top: {(1 - input.y) * 100}vh; left: {input.x * 90}vw;"
 		>

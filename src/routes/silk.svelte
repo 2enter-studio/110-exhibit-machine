@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
 	import { writable } from 'svelte/store';
 	import { fade } from 'svelte/transition';
+	import config from '$lib/config';
 
 	export class Silk {
 		input: AudienceInput;
@@ -11,6 +12,17 @@
 	}
 
 	export const silks = writable<Silk[]>([]);
+
+	const {
+		video_length,
+		string_update_timeout,
+		spider_fade_out_duration,
+		spider_update_timeout,
+		spider_image_amount,
+		spider_y_offset_range,
+		spider_filename_digit,
+		string_dissolve_image_amount
+	} = config;
 </script>
 
 <script lang="ts">
@@ -28,7 +40,7 @@
 
 	onMount(() => {
 		duration = getDurationFromProgress(silk.input);
-		const startAt = videoLength - duration;
+		const startAt = video_length - duration;
 		video.currentTime = startAt;
 		console.table(silk.input);
 
@@ -36,7 +48,7 @@
 
 		video.onended = () => {
 			if (video.src.indexOf('string.webm') !== -1) {
-				video.src = `/silks/webm/dissolve_${Math.floor(Math.random() * 8)}.webm`;
+				video.src = `/silks/webm/dissolve_${Math.floor(Math.random() * string_dissolve_image_amount)}.webm`;
 				console.log('done');
 				video.load();
 				// video.play();
@@ -62,18 +74,18 @@
 			if (video.currentTime) {
 				top = ((video.currentTime - startAt) / duration) * (1 - silk.input.y) - 1;
 			}
-		}, timeStep);
+		}, string_update_timeout);
 
 		const spiderInterval = setInterval(() => {
-			const num = Math.ceil(Math.random() * 200);
+			const num = Math.ceil(Math.random() * spider_image_amount);
 			let imgUrl = num.toString();
-			while (imgUrl.length < 4) {
+			while (imgUrl.length < spider_filename_digit) {
 				imgUrl = `0${imgUrl}`;
 			}
 			spiderImg = `${imgUrl}.webp`;
-			spiderYOffset = Math.random() * 100 * 0.02;
+			spiderYOffset = Math.random() * 100 * spider_y_offset_range;
 			console.log(video.currentTime);
-		}, 1500);
+		}, spider_update_timeout);
 	});
 
 	onDestroy(() => {

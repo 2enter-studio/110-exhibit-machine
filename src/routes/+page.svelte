@@ -7,13 +7,16 @@
 	import { dateToProgress, progressToDate } from '$lib/progress';
 	import moment from 'moment';
 	import type { PageData } from './$types';
+	import config from '$lib/config';
+
+	const client = new PB(PUBLIC_DB_URL);
+	const { progress_update_timeout, page_reload_timeout } = config;
 
 	export let data: PageData;
 	const { inputs } = data;
 	const newInputs: AudienceInput[] = [];
 
 	// Subscribe to audience_inputs collection
-	const client = new PB(PUBLIC_DB_URL);
 	let progress = 0;
 
 	client.collection('audience_inputs').subscribe('*', async (event) => {
@@ -67,14 +70,11 @@
 				inputs.push(...newInputs);
 				displayed.set([]);
 			}
-		}, 200);
+		}, progress_update_timeout);
 
-		setTimeout(
-			() => {
-				window.location.reload();
-			},
-			1000 * 60 * 60 * 4
-		);
+		setTimeout(() => {
+			window.location.reload();
+		}, page_reload_timeout);
 	});
 
 	$: currentDate = moment(progressToDate(progress)).format('YYYY MM DD');
