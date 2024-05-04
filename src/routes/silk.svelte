@@ -27,15 +27,17 @@
 
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { getDurationFromProgress, videoLength } from '$lib/progress';
+	import { getDurationFromProgress } from '$lib/progress';
 
 	export let silk: Silk;
 
 	let video: HTMLVideoElement;
 	let duration: number;
 	let top = -100;
+
 	let spiderImg = '0001.webp';
 	let spiderYOffset = 0;
+
 	let finished = false;
 
 	onMount(() => {
@@ -59,16 +61,6 @@
 				console.log('finished dissolve');
 			}
 		};
-
-		// video.onpause = (e) => {
-		// 	console.log('paused: ', e);
-		// };
-		//
-		// video.onplay = (e) => {
-		// 	console.log('played: ', e);
-		// };
-
-		const timeStep = 100;
 
 		const interval = setInterval(() => {
 			if (video.currentTime) {
@@ -108,7 +100,7 @@
 	{#if !finished}
 		{#key spiderImg}
 			<img
-				out:fade={{ duration: 2500 }}
+				out:fade={{ duration: spider_fade_out_duration }}
 				in:fade={{ duration: 500 }}
 				src="/spiders/webp/1/{spiderImg}"
 				alt=""

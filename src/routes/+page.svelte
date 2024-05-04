@@ -1,13 +1,15 @@
 <script lang="ts">
 	import PB from 'pocketbase';
 	import { PUBLIC_DB_URL } from '$env/static/public';
-	import SilkDOM, { Silk, silks } from './silk.svelte';
-	import NameDOM, { displayed } from './name.svelte';
 	import { onMount } from 'svelte';
-	import { dateToProgress, progressToDate } from '$lib/progress';
 	import moment from 'moment';
 	import type { PageData } from './$types';
+
 	import config from '$lib/config';
+	import { dateToProgress, progressToDate } from '$lib/progress';
+
+	import SilkDOM, { Silk, silks } from './silk.svelte';
+	import NameDOM, { displayed } from './name.svelte';
 
 	const client = new PB(PUBLIC_DB_URL);
 	const { progress_update_timeout, page_reload_timeout } = config;
@@ -31,10 +33,7 @@
 			},
 			body: JSON.stringify({ id })
 		});
-		// if (!res.ok) {
-		// 	console.log(res);
-		// 	return;
-		// }
+
 		const { progress_start } = await res.json();
 		if (!progress_start) return;
 
