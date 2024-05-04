@@ -1,6 +1,6 @@
 import { PUBLIC_DB_URL } from '$env/static/public';
 import { DB_USER, DB_PASS } from '$env/static/private';
-import { value as progress } from '$lib/progress';
+import { progressValue as progress } from '$lib/server/oscProgress';
 
 import pb from 'pocketbase';
 
