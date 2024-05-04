@@ -67,7 +67,7 @@
 				inputs.push(...newInputs);
 				displayed.set([]);
 			}
-		}, 100);
+		}, 200);
 
 		setTimeout(
 			() => {
