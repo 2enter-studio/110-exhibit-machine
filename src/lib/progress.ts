@@ -1,8 +1,8 @@
-import config from '$lib/config'
-const { video_length } = config
+import config from '$lib/config';
+const { video_length, date_start, date_end } = config;
 
-const beginDate = new Date(1960, 0, 1);
-const endDate = new Date(2070, 0, 1);
+const beginDate = new Date(...date_start);
+const endDate = new Date(...date_end);
 const beginTime = beginDate.getTime();
 const endTime = endDate.getTime();
 

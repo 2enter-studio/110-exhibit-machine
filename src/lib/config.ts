@@ -10,5 +10,7 @@ export default {
 	video_length: 387.012,
 	name_update_timeout: 5000,
 	name_fade_duration: 2000,
-	page_reload_timeout: 1000 * 60 * 60 * 4
+	page_reload_timeout: 1000 * 60 * 60 * 4,
+	date_start: [1960, 0, 1],
+	date_end: [2070, 0, 1]
 } as const;
