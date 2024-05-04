@@ -71,9 +71,7 @@
 			}
 		}, progress_update_timeout);
 
-		setTimeout(() => {
-			window.location.reload();
-		}, page_reload_timeout);
+		setTimeout(window.location.reload, page_reload_timeout);
 	});
 
 	$: currentDate = moment(progressToDate(progress)).format('YYYY MM DD');

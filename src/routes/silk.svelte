@@ -76,7 +76,6 @@
 			}
 			spiderImg = `${imgUrl}.webp`;
 			spiderYOffset = Math.random() * 100 * spider_y_offset_range;
-			console.log(video.currentTime);
 		}, spider_update_timeout);
 	});
 
