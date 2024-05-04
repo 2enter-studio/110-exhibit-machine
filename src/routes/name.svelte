@@ -41,7 +41,7 @@
 	{#each $displayed as input}
 		<h1
 			transition:fade={{ duration: name_fade_duration }}
-			class="absolute text-white transition-all duration-1000 text-right w-fit"
+			class="absolute text-white duration-1000 text-right w-fit"
 			style="top: {(1 - input.y) * 100}vh; left: {input.x * 90}vw;"
 		>
 			{moment.utc(input.birthday).format('YYYY MM DD')}
